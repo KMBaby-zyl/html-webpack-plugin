@@ -56,7 +56,7 @@ HtmlWebpackPlugin.prototype.apply = function (compiler) {
     });
   }
 
-  compiler.plugin('make', function (compilation, callback) {
+  compiler.hooks.make.tapAsync('HtmlWebpackPluginHooks', function (compilation, callback) {
     // Compile the template (queued)
     compilationPromise = childCompiler.compileTemplate(self.options.template, compiler.context, self.options.filename, compilation)
       .catch(function (err) {
@@ -76,7 +76,7 @@ HtmlWebpackPlugin.prototype.apply = function (compiler) {
       });
   });
 
-  compiler.plugin('emit', function (compilation, callback) {
+  compiler.hooks.emit.tapAsync('HtmlWebpackPluginHooks', function (compilation, callback) {
     var applyPluginsAsyncWaterfall = self.applyPluginsAsyncWaterfall(compilation);
     // Get all chunks
     var allChunks = compilation.getStats().toJson().chunks;
